@@ -37,8 +37,8 @@ public class TestStudentRepositoryJdbcImpl{
             resultSet = statement.executeQuery(SQL_SELECTED_ALL);
             while (resultSet.next()) {
                 long studentID = resultSet.getLong("id");
-                Student student = null;
-                if (students.stream().filter(student1 -> student1.getId() == studentID).findAny().orElse(null) == null) {
+                Student student = students.stream().filter(student1 -> student1.getId() == studentID).findAny().orElse(null);
+                if (student == null) {
                     student = new Student(studentID,
                             resultSet.getString("first_name").trim(),
                             resultSet.getString("last_name").trim(),
@@ -46,12 +46,14 @@ public class TestStudentRepositoryJdbcImpl{
                             resultSet.getInt("group_number"));
                     students.add(student);
                 }
-                int index = students.indexOf(student);
-                student = students.get(index);
-                Mentor mentor = new Mentor(
-                        resultSet.getLong("m_id"), resultSet.getString("m_first_name"),
-                        resultSet.getString("m_last_name"));
-                student.setMentor(mentor);
+
+                long mentorID;
+                if ((mentorID = resultSet.getLong("m_id")) != 0) {
+                    Mentor mentor = new Mentor(
+                            mentorID, resultSet.getString("m_first_name"),
+                            resultSet.getString("m_last_name"));
+                    student.setMentor(mentor);
+                }
             }
             repository = new StudentsRepositoryJdbcImpl(connection);
         } catch (SQLException e) {
@@ -72,6 +74,11 @@ public class TestStudentRepositoryJdbcImpl{
         List<Student> actual = repository.findAllByAge(age);
         List<Student> expected = students.stream().filter(student -> student.getAge() == age).collect(Collectors.toList());
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testMethodFindAllByAgeShowMentor() {
+        System.out.println(repository.findAllByAge(age).get(0).getMentors());
     }
 
     @Test

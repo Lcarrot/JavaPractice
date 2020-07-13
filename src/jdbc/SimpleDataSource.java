@@ -8,7 +8,7 @@ public class SimpleDataSource {
 
     private final String URL_DATABASE = "jdbc:postgresql://localhost:5432/Homework";
     private final String USER = "postgres";
-    private final String PASSWORD = ""; // TODO: 13.07.2020 it's a secret =) 
+    private final String PASSWORD = "1029384756Qq";
 
 
     public Connection openConnection() {

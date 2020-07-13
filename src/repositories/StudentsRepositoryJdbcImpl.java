@@ -47,8 +47,6 @@ public class StudentsRepositoryJdbcImpl implements StudentsRepository {
                     currentStudent = getStudentFromSqlUsingResultSet(result, studentID);
                     students.add(currentStudent);
                 }
-                int index = students.indexOf(currentStudent);
-                currentStudent = students.get(index);
 
                 long mentorID;
                 if ((mentorID = result.getLong("m_id")) != 0) {
