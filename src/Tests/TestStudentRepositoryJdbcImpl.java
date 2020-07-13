@@ -37,8 +37,9 @@ public class TestStudentRepositoryJdbcImpl{
             resultSet = statement.executeQuery(SQL_SELECTED_ALL);
             while (resultSet.next()) {
                 long studentID = resultSet.getLong("id");
-                Student student = students.stream().filter(student1 -> student1.getId() == studentID).findAny().orElse(null);
-                if (student == null) {
+                Student student;
+                if ((student = students.stream().
+                        filter(student1 -> student1.getId() == studentID).findAny().orElse(null)) == null) {
                     student = new Student(studentID,
                             resultSet.getString("first_name").trim(),
                             resultSet.getString("last_name").trim(),
