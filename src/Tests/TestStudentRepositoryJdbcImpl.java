@@ -3,6 +3,7 @@ package Tests;
 import jdbc.SimpleDataSource;
 import models.Mentor;
 import models.Student;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ public class TestStudentRepositoryJdbcImpl{
     Statement statement;
     ResultSet resultSet;
     StudentsRepository repository;
+    Connection connection;
     int age = 26;
     long id = 3;
     Student STUDENT = new Student(1, "bf", "fb", 43, 32);
@@ -30,9 +32,9 @@ public class TestStudentRepositoryJdbcImpl{
 
     @Before
     public void takeConnectionAndDoListOfStudent() {
-        try {
+        try  {
             SimpleDataSource dataSource = new SimpleDataSource();
-            Connection connection = dataSource.openConnection();
+            connection = dataSource.openConnection();
             students = new LinkedList<>();
             statement = connection.createStatement();
             resultSet = statement.executeQuery(SQL_SELECTED_ALL);
@@ -103,5 +105,16 @@ public class TestStudentRepositoryJdbcImpl{
         System.out.println(expected.getAge());
         expected.setAge(newAge);
         repository.update(expected);
+    }
+
+    @After
+    public void closeALL() {
+        try {
+            connection.close();
+            statement.close();
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }
