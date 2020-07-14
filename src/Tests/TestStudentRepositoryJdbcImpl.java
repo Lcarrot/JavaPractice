@@ -22,6 +22,7 @@ public class TestStudentRepositoryJdbcImpl{
     StudentsRepository repository;
     int age = 26;
     long id = 3;
+    Student STUDENT = new Student(1, "bf", "fb", 43, 32);
 
     String SQL_SELECTED_ALL = "select s.id, s.first_name, s.last_name, age, group_number, " +
             "m.id as m_id, m.first_name as m_first_name, m.last_name as m_last_name " +
@@ -87,5 +88,20 @@ public class TestStudentRepositoryJdbcImpl{
         Student actual = repository.findById(id);
         Student expected = students.stream().filter(student1 -> student1.getId() == id).findAny().orElse(null);
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testMethodSave() {
+        repository.save(STUDENT);
+        System.out.println(STUDENT.getId());
+    }
+
+    @Test
+    public void testMethodUpdate() {
+        Student expected = students.stream().filter(student -> student.getId() == id).findAny().orElse(null);
+        int newAge = expected.getAge() -1;
+        System.out.println(expected.getAge());
+        expected.setAge(newAge);
+        repository.update(expected);
     }
 }

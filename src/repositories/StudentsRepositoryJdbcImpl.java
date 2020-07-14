@@ -110,17 +110,12 @@ public class StudentsRepositoryJdbcImpl implements StudentsRepository {
         }
     }
 
-    // language=SQL
-    private final static String SQL_INSERTED_STUDENT =
-            "insert into student (first_name, last_name, age, group_number) values(?,?,?,?);";
-    // language=SQL
-    private final static String SQL_INSERTED_MENTOR = "insert into mentor (first_name, last_name, student_id) values(?,?,?)";
-
     @Override
     public void save(Student entity) {
-        try (PreparedStatement preparedStatement = preparedStatementForSaveOrUpdateStudentWithoutID(entity, SQL_INSERTED_STUDENT)) {
+        try (PreparedStatement preparedStatement = preparedStatementForSave(entity)) {
             preparedStatement.execute();
             long studentID = getGeneratedKeysForStudent(preparedStatement);
+            entity.setId(studentID);
             for (Mentor mentor:entity.getMentors()) {
                 insertMentor(mentor, studentID);
             }
@@ -130,20 +125,27 @@ public class StudentsRepositoryJdbcImpl implements StudentsRepository {
         }
     }
 
+
     // language=SQL
-    private final static String SQL_UPDATED_STUDENT_BY_ID = "update student set first_name = ?, " +
-            "last_name = ?, age = ?, group_number = ? where id = ";
-    // language=SQL
-    private final static String SQL_DELETED_MENTOR_BY_STUDENT_ID = "delete from mentor where student_id = ";
+    private final static String SQL_INSERTED_STUDENT =
+            "insert into student (first_name, last_name, age, group_number) values(?,?,?,?);";
+
+    private PreparedStatement preparedStatementForSave(Student entity) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERTED_STUDENT, Statement.RETURN_GENERATED_KEYS);
+            preparedStatementForSaveOrUpdateStudentWithoutID(entity, preparedStatement);
+            return preparedStatement;
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
 
     @Override
     public void update(Student entity) {
-        try {
-            long student_id = entity.getId();
-            String request = SQL_UPDATED_STUDENT_BY_ID + student_id;
-            PreparedStatement preparedStatement = preparedStatementForSaveOrUpdateStudentWithoutID(entity, request);
+        long student_id = entity.getId();
+        try (PreparedStatement preparedStatement = preparedStatementForUpdate(entity)) {
             preparedStatement.executeUpdate();
-            deleteMentor();
+            deleteMentors(entity.getId());
             for (Mentor mentor: entity.getMentors()) {
                 insertMentor(mentor, student_id);
             }
@@ -152,40 +154,57 @@ public class StudentsRepositoryJdbcImpl implements StudentsRepository {
         }
     }
 
-    private long getGeneratedKeysForStudent(PreparedStatement preparedStatement) {
-        long key = 0;
-        try (ResultSet result = preparedStatement.getGeneratedKeys()){
-            if (result.next()) {
-                key = result.getLong("id");
-            }
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e);
-        }
-        return key;
-    }
+    // language=SQL
+    private final static String SQL_UPDATED_STUDENT_BY_ID = "update student set first_name = ?, " +
+            "last_name = ?, age = ?, group_number = ? where id = ";
 
-    private void insertMentor(Mentor mentor, long student_id) {
-        try (PreparedStatement preparedStatement = preparedStatementForSaveOrUpdateMentorWithoutID(mentor, student_id)) {
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private PreparedStatement preparedStatementForSaveOrUpdateStudentWithoutID(Student entity, String request) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(request)) {
-            preparedStatement.setString(1, entity.getFirstName());
-            preparedStatement.setString(2, entity.getLastName());
-            preparedStatement.setInt(3, entity.getAge());
-            preparedStatement.setInt(4, entity.getGroupNumber());
+    private PreparedStatement preparedStatementForUpdate(Student entity) {
+        try {
+            String request = SQL_UPDATED_STUDENT_BY_ID + entity.getId();
+            PreparedStatement preparedStatement = connection.prepareStatement(request);
+            preparedStatementForSaveOrUpdateStudentWithoutID(entity, preparedStatement);
             return preparedStatement;
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    private PreparedStatement preparedStatementForSaveOrUpdateMentorWithoutID(Mentor mentor, long student_id) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(StudentsRepositoryJdbcImpl.SQL_INSERTED_MENTOR)) {
+    private long getGeneratedKeysForStudent(PreparedStatement preparedStatement) {
+        try (ResultSet result = preparedStatement.getGeneratedKeys()){
+            if (result.next()) {
+                return result.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
+        return -1;
+    }
+
+    private void insertMentor(Mentor mentor, long student_id) {
+        try (PreparedStatement preparedStatement = preparedStatementForSaveMentorWithoutID(mentor, student_id)) {
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    private void preparedStatementForSaveOrUpdateStudentWithoutID( Student entity, PreparedStatement preparedStatement) {
+        try  {
+            preparedStatement.setString(1, entity.getFirstName());
+            preparedStatement.setString(2, entity.getLastName());
+            preparedStatement.setInt(3, entity.getAge());
+            preparedStatement.setInt(4, entity.getGroupNumber());
+        } catch (SQLException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    // language=SQL
+    private final static String SQL_INSERTED_MENTOR = "insert into mentor (first_name, last_name, student_id) values(?,?,?)";
+
+    private PreparedStatement preparedStatementForSaveMentorWithoutID(Mentor mentor, long student_id) {
+        try {
+        PreparedStatement preparedStatement = connection.prepareStatement(StudentsRepositoryJdbcImpl.SQL_INSERTED_MENTOR);
             preparedStatement.setString(1, mentor.getFirstName());
             preparedStatement.setString(2, mentor.getLastName());
             preparedStatement.setLong(3, student_id);
@@ -195,12 +214,15 @@ public class StudentsRepositoryJdbcImpl implements StudentsRepository {
         }
     }
 
-    private void deleteMentor() {
+    // language=SQL
+    private final static String SQL_DELETED_MENTOR_BY_STUDENT_ID = "delete from mentor where student_id = ";
+
+    private void deleteMentors(long student_id) {
         try(Statement statement = connection.createStatement()) {
-            statement.execute(StudentsRepositoryJdbcImpl.SQL_DELETED_MENTOR_BY_STUDENT_ID);
+            String request = SQL_DELETED_MENTOR_BY_STUDENT_ID + student_id;
+            statement.execute(request);
         } catch (SQLException e) {
             throw new IllegalArgumentException(e);
         }
     }
-
 }
