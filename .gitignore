@@ -1,4 +1,5 @@
 node_modules
+out
 
 *.class
 
@@ -15,6 +16,7 @@ hs_err_pid*
 .settings/
 .project
 .classpath
+.jpg
 .springBeans
 **/target/
 /commit.txt
