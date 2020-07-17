@@ -1,5 +1,12 @@
+//подключаем библиотеку express и body-parser;
 const express = require('express');
+const bodyParser = require('body-parser');
+//создаём объект express;
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+require('./app/routes')(app);
+//раздаём папку public
 app.use(express.static('public'));
-app.listen(18068);
-console.log("Server started at 18068");
+//запускаем на порту 80
+app.listen(80);
+console.log("Server started at 80");

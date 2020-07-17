@@ -1,74 +1,85 @@
-.navbar{
- background:#556B2F;
+.navbar {
+    background: #556B2F;
 }
-.nav-link , .navbar-brand{
- color: #f4f4f4;
- cursor: pointer;
+
+.nav-link, .navbar-brand {
+    color: #f4f4f4;
+    cursor: pointer;
 }
-.nav-link{
- margin-right: 1em !important;
+
+.nav-link {
+    margin-right: 1em !important;
 }
-.nav-link:hover{
- background: #f4f4f4;
- color: #f97300;
+
+.nav-link:hover {
+    background: #f4f4f4;
+    color: #f97300;
 }
-.navbar-collapse{
- justify-content: flex-end;
+
+.navbar-collapse {
+    justify-content: flex-end;
 }
-.navbar-toggler{
-  background:#ffc !important;
+
+.navbar-toggler {
+    background: #ffc !important;
 }
-.bg-dark{
-background-color:#343a40!important
+
+.bg-dark {
+    background-color: #343a40 !important;
 }
-.bg-primary{
-background-color:#343a40!important
+
+.bg-primary {
+    background-color: #343a40 !important;
 }
+
 input:focus {
-background-color: #eaeaea;
+    background-color: #eaeaea;
 }
+
 form {
-	margin: 4em 0;
- padding: 1em;
+    margin: 4em 0;
+    padding: 1em;
 }
 
 body {
-	background: #F8F8FF;
+    background: #F8F8FF;
 }
-legend{
-	font-size : 25px;
-	text-align: center;
-	color: #191970;
+
+legend {
+    font-size: 25px;
+    text-align: center;
+    color: #191970;
 }
+
 label, span {
-  display: block;
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #D2691E;
+    display: block;
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #D2691E;
 }
 
 input[type="text"], input[type="email"] {
-  border-width: 1px;
-  margin: 0;
-  width: 100%;
-  padding: 15px 20px;
-  background: #e6e6e6;
+    border-width: 1px;
+    margin: 0;
+    width: 100%;
+    padding: 15px 20px;
+    background: #e6e6e6;
 }
 
 input[type="text"]:focus, input[type="email"]:focus {
-  box-shadow: inset 0 0 0 2px rgba(0,0,0,.2);
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, .2);
 }
 
 button {
-  padding: 10px 0;
-  border-width: 0;
-  display: block;
-  width: 120px;
-  margin: 25px auto 0;
-  background: #90EE90;
-  color: #8B0000;
-  font-size: 14px;
-  outline: none;
-  text-transform: uppercase;
+    padding: 10px 0;
+    border-width: 0;
+    display: block;
+    width: 120px;
+    margin: 25px auto 0;
+    background: #90EE90;
+    color: #8B0000;
+    font-size: 14px;
+    outline: none;
+    text-transform: uppercase;
 }
 

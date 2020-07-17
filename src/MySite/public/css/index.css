@@ -1,56 +1,56 @@
 .navbar{
- background:#556B2F;
+	background:#556B2F;
 }
 .nav-link , .navbar-brand{
- color: #f4f4f4;
- cursor: pointer;
+	color: #f4f4f4;
+	cursor: pointer;
 }
 .nav-link{
- margin-right: 1em !important;
+	margin-right: 1em !important;
 }
 .nav-link:hover{
- background: #f4f4f4;
- color: #f97300;
+	background: #f4f4f4;
+	color: #f97300;
 }
 .navbar-collapse{
- justify-content: flex-end;
+	justify-content: flex-end;
 }
 .navbar-toggler{
-  background:#ffc !important;
+	background:#ffc !important;
 }
 .bg-dark{
-background-color:#343a40!important
+	background-color:#343a40!important;
 }
 .bg-primary{
-background-color:#343a40!important
+	background-color:#343a40!important;
 }
 body{
 	background-color: #F8F8FF;
 }
 h1{
 	margin: 1em 0;
- padding: 1em;
- text-align: center;
- color: #000080;
+	padding: 1em;
+	text-align: center;
+	color: #000080;
 }
 .about{
- position: relative;
- margin: 1em 0;
- padding: 1em;
+	position: relative;
+	margin: 1em 0;
+	padding: 1em;
 }
 .about img{
- height: 100%;
-    width: 100%;
-    border-radius: 50%
+	height: 100%;
+	width: 100%;
+	border-radius: 50%;
 }
 .about .desc{
- padding: 2em;
- border-left:4px solid #10828C;
+	padding: 2em;
+	border-left:4px solid #10828C;
 }
 .about .desc h3{
- color: #10828C;
+	color: #10828C;
 }
 .about .desc p{
- font-size: 20px;
- color:#888;
+	font-size: 20px;
+	color:#888;
 }

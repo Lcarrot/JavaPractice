@@ -1,7 +1,10 @@
 node_modules
 out
+.idea
+.git
 
 *.class
+*.jpg
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -16,7 +19,6 @@ hs_err_pid*
 .settings/
 .project
 .classpath
-.jpg
 .springBeans
 **/target/
 /commit.txt
