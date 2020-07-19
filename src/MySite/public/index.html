@@ -14,7 +14,7 @@
 </head>
 <script>
     function getUserNameAndSurname() {
-        $.getJSON("/users", function (response) {
+        $.getJSON("/me", function (response) {
             let nameAndSurname = "Я - ";
             nameAndSurname += response[0]["name"] + " ";
             nameAndSurname += response[0]["surname"];
@@ -23,13 +23,13 @@
     }
 
     function getUsersDescription() {
-        $.getJSON("/users", function (response) {
-            let  description = response[0]["description"];
+        $.getJSON("/me", function (response) {
+            let description = response[0]["description"];
             $("#description").append(description);
         });
     }
 </script>
-<body onload="getUserNameAndSurname(); getUsersDescription();">
+<body onload="getUsersDescription(); getUserNameAndSurname()">
 <nav class=" navbar navbar-expand-lg fixed-top">
     <a class="navbar-brand" href="form.html">Оставить заявку</a>
     <button class="navbar-toggler" type="button" data-tougle="collapse"
@@ -45,6 +45,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="#portfolio">Портфолио</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="getJSON.html">Заявки пользователей</a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -55,8 +58,8 @@
             <img src="sources/1.jpg" class="img-fluid" alt="">
         </div>
         <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 desc">
-            <h3><span id="name-and-surname"></span></h3>
-            <p id="description"></p>
+            <h3><span id="name-and-surname"> </span></h3>
+            <p id="description"> </p>
             <pre>
 					ЗАПУСКАЕМ
 				░ГУСЯ░▄▀▀▀▄░Студенты!░░

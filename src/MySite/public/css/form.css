@@ -58,7 +58,7 @@ label, span {
     color: #D2691E;
 }
 
-input[type="text"], input[type="email"] {
+input[type="text"], input[type="email"]{
     border-width: 1px;
     margin: 0;
     width: 100%;

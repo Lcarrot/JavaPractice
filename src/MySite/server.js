@@ -1,4 +1,4 @@
-//подключаем библиотеку express и body-parser;
+//подключаем библиотеку express, body-parser, pg(PostgreSQL);
 const express = require('express');
 const bodyParser = require('body-parser');
 //создаём объект express;
